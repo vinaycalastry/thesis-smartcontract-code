@@ -1,0 +1,21 @@
+pragma solidity ^0.4.20;
+
+contract SensorContract{
+    
+    //variables to store current temperature and humidity.
+    uint64 temperature = 0;
+    uint64 humidity = 0;
+    
+    
+    //method to store the current temperature and humidity
+    function setSensorData(uint64 temperatureInput, uint64 humidityInput) public returns (bool success){
+        temperature = temperatureInput;
+        humidity = humidityInput;
+        return true;
+    }
+    
+    //method to retrieve the current temperature and humidity
+    function getSensorData() public view returns (uint64, uint64){
+        return (temperature, humidity);
+    }
+}
