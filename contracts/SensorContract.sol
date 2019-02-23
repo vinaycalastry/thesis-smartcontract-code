@@ -1,60 +1,63 @@
 pragma solidity 0.4.24;
 
 contract SensorContract{
+
+    //Contract created by
+    //address private createdBy;
     
-    //struct to store the temperature, humidity and time when reading occurred
+    //struct to store the filehashes which store the actual sensor data
     struct SensorData{
-        uint64 temperature;
-        uint64 humidity;
-        string dataStorageTime;
+        //filehash is the swarm handle containing the actual sensor readings
+        string filehash;
     }
     
     //map the struct to an id
     mapping(uint => SensorData) sensorDataStore;
     
     //dynamic array of ids to store the readings 
-    uint[] public sensorIDStore;
+    uint[] private sensorIDStore;
     
-    //var to keep track of latest reading.
-    uint public currentID;
+    //CurrentID is the ID of the latest file handle created in Swarm
+    uint private currentID;
 
+    //Constructor for the Smart Contract
     constructor() public {
         currentID = 0;
     }
 
     //function to get the currentID
     function getCurrentID() public view returns(uint){
-        return currentID-1;
+        return currentID;
     }
 
-    function incrCurrentID() public returns(uint){
-        return currentID++;
+    //function to increment the ID used internally for managing filehashes
+    function incrCurrentID() public{
+        currentID++;
     }
     
-    //Function to store the data coming from IOT DHT11 sensor
-    function setSensorData(uint64 _temperature, uint64 _humidity, string _dataStorageTime) public {
-        SensorData storage sensorReadings = sensorDataStore[currentID];
+    //Function to store the filehash from swarm
+    function setSensorData(string _filehash) public {
+        uint idToStore = getCurrentID();
+        SensorData storage sensorReadings = sensorDataStore[idToStore];
 
-        sensorReadings.temperature = _temperature;
-        sensorReadings.humidity = _humidity;
-        sensorReadings.dataStorageTime = _dataStorageTime;
-        
-        sensorIDStore.push(currentID)-1;
+        sensorReadings.filehash = _filehash;
+       
+        sensorIDStore.push(currentID);
         incrCurrentID();
     }
     
     
     //Function to get the latest stored data
-    function getSensorDataLatest() public view returns (uint64, uint64, string){
+    function getSensorDataLatest() public view returns (string){
         SensorData storage sensorReadings = sensorDataStore[getCurrentID()];
 
-        return (sensorReadings.temperature, sensorReadings.humidity, sensorReadings.dataStorageTime);
+        return sensorReadings.filehash;
     }
     
     //Function to get the data stored under some ID
-    function getSensorDataByID(uint ID) public view returns (uint64, uint64, string){
+    function getSensorDataByID(uint ID) public view returns (string){
         SensorData storage sensorReadings = sensorDataStore[ID];
 
-        return (sensorReadings.temperature, sensorReadings.humidity, sensorReadings.dataStorageTime);
-    }    
+        return sensorReadings.filehash;
+    }
 }
