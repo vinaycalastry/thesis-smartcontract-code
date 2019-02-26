@@ -22,7 +22,7 @@ contract SensorContract{
 
     //Constructor for the Smart Contract
     constructor() public {
-        currentID = 0;
+        currentID = 1;
     }
 
     //function to get the currentID
@@ -49,7 +49,7 @@ contract SensorContract{
     
     //Function to get the latest stored data
     function getSensorDataLatest() public view returns (string){
-        SensorData storage sensorReadings = sensorDataStore[getCurrentID()];
+        SensorData storage sensorReadings = sensorDataStore[getCurrentID()-1];
 
         return sensorReadings.filehash;
     }
