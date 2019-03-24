@@ -15,7 +15,7 @@ contract SensorContract{
     mapping(uint => SensorData) sensorDataStore;
     
     //dynamic array of ids to store the readings 
-    uint[] private sensorIDStore;
+    //uint[] private sensorIDStore;
     
     //CurrentID is the ID of the latest file handle created in Swarm
     uint private currentID;
@@ -42,7 +42,7 @@ contract SensorContract{
 
         sensorReadings.filehash = _filehash;
        
-        sensorIDStore.push(currentID);
+        //sensorIDStore.push(currentID);
         incrCurrentID();
     }
     
