@@ -3,7 +3,7 @@ pragma solidity 0.4.24;
 contract SensorContract{
 
     //Contract created by
-    address private createdBy;
+    address private creator;
     
     //struct to store the filehashes which store the actual sensor data
     struct SensorData{
@@ -17,30 +17,16 @@ contract SensorContract{
     //CurrentID is the ID of the latest file handle created in Swarm
     uint private currentID;
     
-    //store registered addresses in mapping
     mapping (address => bool) private trustedAddresses;
-    
-    //event after registration/de-registration
-    event deviceEvent(
-        address indexed _from,
-        string _message
-    );
-    
-    //event after registration/de-registration
-    event setFileHashEvent(
-        address indexed _from,
-        string _message
-    );
 
     //Constructor for the Smart Contract
     constructor() public {
         currentID = 1;
-        createdBy = msg.sender;
+        creator = msg.sender;
     }
     
-    //Modify some functions to be executed only by the Contract creator
     modifier ownerOnly {
-        require(msg.sender == createdBy);
+        require(msg.sender == creator);
         _;
     }
 
@@ -60,28 +46,28 @@ contract SensorContract{
             return trustedAddresses[addressToAdd];
     }
     
-    //register IoT device
-    function registerDevice(address addressToAdd) ownerOnly public {
+    //register device
+    function registerDevice(address addressToAdd) ownerOnly public returns (string) {
         if(devicePresent(addressToAdd)) {
-            emit deviceEvent(addressToAdd, "DEVICE ALREADY REGISTERED");
+            return "INFO:ALREADY_REGISTERED";
         }
             trustedAddresses[addressToAdd] = true;
-            emit deviceEvent(addressToAdd, "SUCESSFULLY REGISTERED");
+            return "INFO:REGISTRATION_SUCCESSFUL";
     }
     
     
-    //deregister IoT device
-    function deregisterDevice(address addressToRemove) ownerOnly public {
+    //deregister device
+    function deregisterDevice(address addressToRemove) ownerOnly public returns (string) {
         if(!devicePresent(addressToRemove)) {
-            emit deviceEvent(addressToRemove, "DEVICE NOT REGISTERED");
+            return "INFO:DEVICE_NOT_PRESENT";
         }
             trustedAddresses[addressToRemove] = false;
-            emit deviceEvent(addressToRemove, "SUCESSFULLY DEREGISTERED");
+            return "INFO:DEREGISTRATION_SUCCESSFUL";
     }
     
 
     //Function to store the filehash from swarm
-    function setSensorData(string _filehash) public {
+    function setSensorData(string _filehash) public returns (string) {
         if(devicePresent(msg.sender)) {
             uint idToStore = getCurrentID();
             SensorData storage sensorReadings = sensorDataStore[idToStore];
@@ -90,9 +76,9 @@ contract SensorContract{
        
             incrCurrentID();
             
-            emit setFileHashEvent(msg.sender, "FILE HASH TRANSACTION CALLED");
+            return "SUCCESS";
         } else {
-            emit setFileHashEvent(msg.sender, "DEVICE NOT REGISTERED");
+            return "ERROR";
         }
     }
     
@@ -104,7 +90,7 @@ contract SensorContract{
 
             return sensorReadings.filehash;
         }
-        return "DEVICE NOT REGISTERED";
+        return "ERROR";
     }
     
     //Function to get the data stored under some ID
@@ -114,6 +100,6 @@ contract SensorContract{
 
             return sensorReadings.filehash;
         }
-        return "DEVICE NOT REGISTERED";
+        return "ERROR";
     }
 }
