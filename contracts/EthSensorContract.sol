@@ -78,7 +78,7 @@ contract SensorContract{
         sensorReadings.temperature = temp;
         sensorReadings.humidity = humi;
         sensorReadings.tempunits = tempunits;
-        sensorReadingshumiunits = humiunits;
+        sensorReadings.humiunits = humiunits;
         sensorReadings.timestamp = timestamp;
         sensorReadings.devicetype = devicetype;
         sensorReadings.deviceid = deviceid;
