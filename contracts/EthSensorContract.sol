@@ -103,7 +103,7 @@ contract SensorContract{
         string sensortype){
         SensorData storage sensorReadings = sensorDataStore[getCurrentID()-1];
 
-        return sensorReadings.filehash;
+        return sensorReadings.temp;
     }
     
     //Function to get the data stored under some ID
