@@ -92,15 +92,7 @@ contract SensorContract{
     
     
     //Function to get the latest stored data
-    function getSensorDataLatest() public view returns (string temp, 
-        string humi, 
-        string tempunits, 
-        string humiunits, 
-        string timestamp, 
-        string devicetype, 
-        string deviceid,
-        string deviceip, 
-        string sensortype){
+    function getSensorDataLatest() public view returns (string temp){
         SensorData storage sensorReadings = sensorDataStore[getCurrentID()-1];
 
         return sensorReadings.temperature;
@@ -108,15 +100,7 @@ contract SensorContract{
     
     //Function to get the data stored under some ID
     function getSensorDataByID(uint ID) public view returns (
-        string temp, 
-        string humi, 
-        string tempunits, 
-        string humiunits, 
-        string timestamp, 
-        string devicetype, 
-        string deviceid,
-        string deviceip, 
-        string sensortype){
+        string){
             SensorData storage sensorReadings = sensorDataStore[ID];
 
             return sensorReadings.temperature;
