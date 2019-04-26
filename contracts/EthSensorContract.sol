@@ -1,6 +1,6 @@
 pragma solidity 0.4.24;
 
-contract SensorContract{
+contract EthSensorContract{
 
     //Contract created by
     address private createdBy;
