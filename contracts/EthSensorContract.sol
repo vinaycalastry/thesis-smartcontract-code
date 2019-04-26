@@ -103,11 +103,12 @@ contract SensorContract{
         string sensortype){
         SensorData storage sensorReadings = sensorDataStore[getCurrentID()-1];
 
-        return sensorReadings.temp;
+        return sensorReadings.temperature;
     }
     
     //Function to get the data stored under some ID
-    function getSensorDataByID(uint ID) public view returns (string temp, 
+    function getSensorDataByID(uint ID) public view returns (
+        string temp, 
         string humi, 
         string tempunits, 
         string humiunits, 
@@ -118,6 +119,6 @@ contract SensorContract{
         string sensortype){
             SensorData storage sensorReadings = sensorDataStore[ID];
 
-            return sensorReadings.temp;
+            return sensorReadings.temperature;
     }
 }
